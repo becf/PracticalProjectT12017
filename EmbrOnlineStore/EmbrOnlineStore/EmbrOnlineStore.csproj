@@ -123,6 +123,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\Item.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\Receipt.cs" />
+    <Compile Include="Models\ShopModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -183,10 +188,13 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
+    <Content Include="Views\Home\_ItemCatalogView.cshtml" />
+    <Content Include="Views\Home\_OrderStatusView.cshtml" />
+    <Content Include="Views\Home\_CheckOutView.cshtml" />
+    <Content Include="Views\Home\_ShoppingCartView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\NewFolder1\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
