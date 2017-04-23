@@ -120,6 +120,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Utilities\TestDataGenerator.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -129,6 +130,7 @@
     <Compile Include="Models\Receipt.cs" />
     <Compile Include="Models\ShopModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="System\Web\Http.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\EmbrDB.mdf" />
@@ -139,6 +141,12 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\ajax-loader.gif" />
+    <Content Include="Content\Images\background.jpg" />
+    <Content Include="Content\Images\Dummy\1.png" />
+    <Content Include="Content\Images\Dummy\2.png" />
+    <Content Include="Content\Images\Dummy\3.png" />
+    <Content Include="Content\Images\Dummy\4.png" />
     <Content Include="Content\Images\EMBR Banner.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

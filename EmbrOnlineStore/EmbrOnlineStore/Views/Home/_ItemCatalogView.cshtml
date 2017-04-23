@@ -1,3 +1,123 @@
 ﻿@model EmbrOnlineStore.Models.ShopModel
 
-hello i am the item catalog view :)
+<script src="~/Scripts/bootstrap.js"></script>
+<link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
+<div class="page-header">
+    <h1>Item Catalogue <small>Subtext for header</small></h1>
+</div>
+<div style="height:1000px">
+    @*Drop down list for ordering*@
+    <div class="dropdown" style="float:right; margin-right:15px;">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Order by...
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <li><a href="#">Price - High to Low </a></li>
+            <li><a href="#">Price - Low to High </a></li>
+            <li><a href="#">Name - A to Z </a></li>
+            <li><a href="#">Name - Z to A </a></li>
+        </ul>
+    </div>
+    <br /><br />
+    <div id="filters" style="float:left; width:15%; top:50px; height:20%; border: solid 1px #d1cccc; background-color:white; padding:5px; overflow-y:scroll;">
+        <h4>Filter Items</h4>
+        @{
+            var categoryList = new List<String>();
+
+            foreach (var item in Model.itemCatalog)
+            {
+                if (!categoryList.Contains(item.category))
+                {
+                    categoryList.Add(item.category);
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="category[]" checked="checked" value="@item.category">@item.category</label>
+                    </div>
+                }
+            }
+        }
+       
+    </div>
+    <div id="items" style="float:right; width: 80%">
+       
+        <div class="row" style="width:100%;" id="itemCatalog">
+            @{
+                foreach (var item in Model.itemCatalog)
+                {
+                    <div class="col-sm-6 col-md-4 @item.category">
+                        <div class="thumbnail" id="item_@item.itemID">
+                            <img src="@item.imageURL" alt="@item.name">
+                            <div class="caption">
+                                <h3>@item.name</h3>
+                                <p>@item.description <p>
+                                <p><b>$@item.sellingPrice</b></p>
+                                <p>
+    
+        <div class="input-group">
+            <input type="number" class="form-control" id="quantity_@item.itemID" value="1">
+            <span class="input-group-btn ">
+                <button class="btn btn-primary" onclick="AddToCart(@item.itemID);" type="button">Add to Cart</button>
+            </span>
+        </div><!-- /input-group -->
+</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+</div>
+<script>
+    function FilterItems() {
+        var searchText = $('#item_search').val();
+
+
+    /*    $.each($('#itemCatalog'), function (i, left) {
+            $('div', left).each(function () {
+                if ($(this).hasClass("thumbnail")) {
+                    if (this.id.indexOf(searchText) != -1) {
+                        $(this).hide();
+                    }
+                }
+
+            });
+        })*/
+    }
+
+    $(document).ready(function () {
+        $(':checkbox').change(function () {
+            var values = new Array();
+            $.each($("input[name='category[]']:checked"), function () {
+                values.push($(this).val());
+                // or you can do something to the actual checked checkboxes by working directly with  'this'
+                // something like $(this).hide() (only something useful, probably) :P
+
+               // $("." + $(this).val()).hide();
+            });
+
+        });
+    });
+
+    function AddToCart(itemID) {
+        var qty = $("#quantity_" + itemID + "").val();
+        //alert(qty + " of " + itemID);
+        var uri = encodeURI('@Url.Action("AddItemToCart", "Home")');
+       
+        $.ajax({
+            url: uri ,
+            type: "POST",
+            cache: false,
+            data: "{'itemId':'"+itemID+"', 'quantity' : '"+qty+"'}",
+            contentType: "application/json",
+            error: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus, /*string*/ errorThrown) {
+                alert(errorThrown);
+            },
+            complete: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus) {
+                // refresh cart
+            }
+
+        });
+    };
+</script>

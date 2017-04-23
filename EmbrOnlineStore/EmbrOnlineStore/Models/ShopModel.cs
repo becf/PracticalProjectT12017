@@ -12,9 +12,9 @@ namespace EmbrOnlineStore.Models
         /// <summary>
         /// Default constructors for ShopModel
         /// </summary>
-        ShopModel() { }
+       public ShopModel() { }
 
-        ShopModel(ShopModel shopModel) { }
+     public   ShopModel(ShopModel shopModel) { }
 
         public List<Item> itemCatalog { get; set; } // list of items
         public Item selectedItem { get; set; } // selected item 

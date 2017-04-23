@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EmbrOnlineStore.Controllers.Utilities;
+using EmbrOnlineStore.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,9 +11,43 @@ namespace EmbrOnlineStore.Controllers
 {
     public class HomeController : Controller
     {
+        public ShopModel model;
         public ActionResult Index()
         {
+            Session["model"] = TestDataGenerator.PopulateDummyModel();
+          
             return View();
+        }
+
+        [HttpPost]
+        public void AddItemToCart(string itemId, string quantity)
+        {
+            model = (ShopModel) Session["model"]; // get the model object
+            Item currentItem = null;
+            // For each item in the item catalog, check whether the item's ID matches the
+            // input ID.
+            foreach (var i in model.itemCatalog)
+            {
+                if (i.itemID == Int32.Parse(itemId)/*Parse Item ID, TODO: exception handling... */)
+                {
+                    currentItem = i; break; // there is a match - store the matching item and break out of the loop
+                }
+            }
+
+            if (currentItem != null) // if we have found an item
+            {
+                // if our shopping cart already contains the item we don't want to
+                // duplicate it. so we will add the new quantity to the old quantity.
+                if (model.shoppingCart.ContainsKey(currentItem)) 
+                {
+                    model.shoppingCart[currentItem] += Int32.Parse(quantity);
+                }
+                else
+                {
+                    model.shoppingCart.Add(currentItem, Int32.Parse(quantity)); // doesn't exist, add new entry.
+                }
+            }
+            Session["model"] = model; // reassign model.
         }
         /// <summary>
         /// Loads the Item Catalog partial view.
@@ -20,7 +56,8 @@ namespace EmbrOnlineStore.Controllers
         [HttpGet]
         public async Task<ActionResult> LoadItemCatalogView()
         {
-            return PartialView("_ItemCatalogView");
+            model = TestDataGenerator.PopulateDummyModel();
+            return PartialView("_ItemCatalogView", model);
         }
 
         /// <summary>

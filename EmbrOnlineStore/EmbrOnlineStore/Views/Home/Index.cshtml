@@ -1,9 +1,10 @@
 ﻿<script src="~/Scripts/jquery-3.1.1.js"></script>
-<div id="result">
-
+<div id="result" style="background-color:rgba(255, 255, 255, 0.8); padding:10px;">
+    <img src="~/Content/Images/ajax-loader.gif" style="align-content:center;" />
 </div>
 <script>
-$(document).ready(function(){
+    $(document).ready(function () {
+
      $("#result").load('@Url.Action("LoadItemCatalogView", "Home")')
 });
 

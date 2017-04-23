@@ -19,7 +19,7 @@ namespace EmbrOnlineStore.Models
         /// <summary>
         /// Default constructor for Item object.
         /// </summary>
-        Item()
+        public Item()
         {
             // intentionally empty
         }
@@ -35,7 +35,7 @@ namespace EmbrOnlineStore.Models
         /// <param name="category"></param>
         /// <param name="itemURL"></param>
         /// 
-        Item(string name, string description, string category, double unitPrice, double sellingPrice, string imageURL)
+        public Item(string name, string description, string category, double unitPrice, double sellingPrice, string imageURL)
         {
             this.name = name;
             this.description = description;
