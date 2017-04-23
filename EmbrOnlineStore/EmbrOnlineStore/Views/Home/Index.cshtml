@@ -1,11 +1,16 @@
-﻿<script src="~/Scripts/jquery-3.1.1.js"></script>
-<div id="result" style="background-color:rgba(255, 255, 255, 0.8); padding:10px;">
+﻿@model EmbrOnlineStore.Models.ShopModel
+<script src="~/Scripts/jquery-3.1.1.js"></script>
+<div id="shopping_cart_min" style="float:right; top:0px;z-index:1000;">
+    <img src="~/Content/Images/ajax-loader.gif" style="align-content:center;" />
+
+</div>
+<div id="content_div" style="background-color:rgba(255, 255, 255, 0.8); padding:10px;">
     <img src="~/Content/Images/ajax-loader.gif" style="align-content:center;" />
 </div>
 <script>
     $(document).ready(function () {
-
-     $("#result").load('@Url.Action("LoadItemCatalogView", "Home")')
+        $("#content_div").load('@Url.Action("LoadItemCatalogView", "Home")')
+        $("#shopping_cart_min").load('@Url.Action("LoadShoppingCartMinimalView", "Home")')
 });
 
 </script>

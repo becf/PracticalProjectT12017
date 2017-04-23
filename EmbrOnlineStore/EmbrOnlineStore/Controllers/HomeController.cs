@@ -15,7 +15,6 @@ namespace EmbrOnlineStore.Controllers
         public ActionResult Index()
         {
             Session["model"] = TestDataGenerator.PopulateDummyModel();
-          
             return View();
         }
 
@@ -40,6 +39,17 @@ namespace EmbrOnlineStore.Controllers
             }
             Session["model"] = model; // reassign model.
         }
+
+        /// <summary>
+        /// Loads the minimal shopping cart view (i.e. the cart on top right hand corner)
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult> LoadShoppingCartMinimalView()
+        {
+            model = (ShopModel)Session["model"];
+            return PartialView("_ShoppingCartMinimalView", model);
+        }
         /// <summary>
         /// Loads the Item Catalog partial view.
         /// </summary>
@@ -47,7 +57,7 @@ namespace EmbrOnlineStore.Controllers
         [HttpGet]
         public async Task<ActionResult> LoadItemCatalogView()
         {
-            model = TestDataGenerator.PopulateDummyModel();
+            model = (ShopModel)Session["model"];
             return PartialView("_ItemCatalogView", model);
         }
 
@@ -58,7 +68,8 @@ namespace EmbrOnlineStore.Controllers
         [HttpGet]
         public async Task<ActionResult> LoadCheckOutView()
         {
-            return PartialView("_CheckoutView");
+            model = (ShopModel)Session["model"];
+            return PartialView("_CheckoutView", model);
         }
 
         /// <summary>
@@ -68,7 +79,8 @@ namespace EmbrOnlineStore.Controllers
         [HttpGet]
         public async Task<ActionResult> LoadShoppingCartView()
         {
-            return PartialView("_ShoppingCartView");
+            model = (ShopModel)Session["model"];
+            return PartialView("_ShoppingCartView", model);
         }
 
         /// <summary>
@@ -78,7 +90,8 @@ namespace EmbrOnlineStore.Controllers
         [HttpGet]
         public async Task<ActionResult> LoadOrderStatusView()
         {
-            return PartialView("_OrderStatusView");
+            model = (ShopModel)Session["model"];
+            return PartialView("_OrderStatusView", model);
         }
         public ActionResult About()
         {

@@ -1,0 +1,12 @@
+﻿@model EmbrOnlineStore.Models.ShopModel
+
+@{
+    double cartTotal = 0.0;
+    int itemCount = Model.shoppingCart.Count;
+
+    foreach (var v in Model.shoppingCart)
+    {
+        cartTotal += (v.Key.sellingPrice * v.Value);
+    }
+}
+<span class="glyphicon glyphicon-shopping-cart"> Shopping Cart (@itemCount) - $@cartTotal </span>
