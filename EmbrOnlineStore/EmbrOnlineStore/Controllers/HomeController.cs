@@ -36,16 +36,7 @@ namespace EmbrOnlineStore.Controllers
 
             if (currentItem != null) // if we have found an item
             {
-                // if our shopping cart already contains the item we don't want to
-                // duplicate it. so we will add the new quantity to the old quantity.
-                if (model.shoppingCart.ContainsKey(currentItem)) 
-                {
-                    model.shoppingCart[currentItem] += Int32.Parse(quantity);
-                }
-                else
-                {
-                    model.shoppingCart.Add(currentItem, Int32.Parse(quantity)); // doesn't exist, add new entry.
-                }
+                model.shoppingCart = CheckoutFacilitator.AddItemToCart(currentItem, Int32.Parse(quantity), model);
             }
             Session["model"] = model; // reassign model.
         }
