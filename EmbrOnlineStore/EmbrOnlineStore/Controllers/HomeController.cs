@@ -1,10 +1,7 @@
 ﻿using EmbrOnlineStore.Controllers.Utilities;
 using EmbrOnlineStore.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace EmbrOnlineStore.Controllers
@@ -17,11 +14,52 @@ namespace EmbrOnlineStore.Controllers
             Session["model"] = TestDataGenerator.PopulateDummyModel();
             return View();
         }
+        [HttpPost]
+        public void EditCartItemQty(string itemId, string quantity)
+        {
+            model = (ShopModel)Session["model"]; // get the model object
+            Item currentItem = null;
+            // For each item in the item catalog, check whether the item's ID matches the
+            // input ID.
+            foreach (var i in model.itemCatalog)
+            {
+                if (i.itemID == Int32.Parse(itemId)/*Parse Item ID, TODO: exception handling... */)
+                {
+                    currentItem = i; break; // there is a match - store the matching item and break out of the loop
+                }
+            }
 
+            if (currentItem != null) // if we have found an item
+            {
+                model.shoppingCart = CheckoutFacilitator.EditQuantity(currentItem, Int32.Parse(quantity), model);
+            }
+            Session["model"] = model; // reassign model.
+        }
+        [HttpPost]
+        public void DeleteItemFromCart(string itemId)
+        {
+            model = (ShopModel)Session["model"]; // get the model object
+            Item currentItem = null;
+            // For each item in the item catalog, check whether the item's ID matches the
+            // input ID.
+            foreach (var i in model.itemCatalog)
+            {
+                if (i.itemID == Int32.Parse(itemId)/*Parse Item ID, TODO: exception handling... */)
+                {
+                    currentItem = i; break; // there is a match - store the matching item and break out of the loop
+                }
+            }
+
+            if (currentItem != null) // if we have found an item
+            {
+                model.shoppingCart = CheckoutFacilitator.RemoveItemFromCart(currentItem, model);
+            }
+            Session["model"] = model; // reassign model.
+        }
         [HttpPost]
         public void AddItemToCart(string itemId, string quantity)
         {
-            model = (ShopModel) Session["model"]; // get the model object
+            model = (ShopModel)Session["model"]; // get the model object
             Item currentItem = null;
             // For each item in the item catalog, check whether the item's ID matches the
             // input ID.

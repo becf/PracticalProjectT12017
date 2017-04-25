@@ -1,13 +1,19 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
- /*  background-image: url('Images/background.jpg');*/
-   background-position-y:top;
-   background-position-x:right;
-   background-repeat: no-repeat;
-   background-attachment: fixed;
+    /*  background-image: url('Images/background.jpg');*/
+    background-position-y: top;
+    background-position-x: right;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Roboto', sans-serif;
 }
 
+h2 {
+    font-size: medium;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+}
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;

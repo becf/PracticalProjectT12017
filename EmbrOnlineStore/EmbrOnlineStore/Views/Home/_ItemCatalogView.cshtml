@@ -2,9 +2,8 @@
 
 <script src="~/Scripts/bootstrap.js"></script>
 <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
-<div class="page-header">
-    <h1>Item Catalogue <small>Subtext for header</small></h1>
-</div>
+<h2>Item Catalogue</h2>
+
 <div style="height:1000px">
     @*Drop down list for ordering*@
     <div class="dropdown" style="float:right; margin-right:15px;">
@@ -115,7 +114,7 @@
                 alert(errorThrown);
             },
             complete: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus) {
-                $("#shopping_cart_min").html(' <img src="~/Content/Images/ajax-loader.gif" style="align-content:center;" />');
+                $("#shopping_cart_min").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />');
 
                 $("#shopping_cart_min").load('@Url.Action("LoadShoppingCartMinimalView", "Home")')
             }

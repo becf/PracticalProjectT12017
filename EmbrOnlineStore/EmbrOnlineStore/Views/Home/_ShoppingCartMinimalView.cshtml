@@ -1,12 +1,24 @@
-﻿@model EmbrOnlineStore.Models.ShopModel
+﻿@* Slide out shopping cart by https://github.com/ahmedrad/sliiide*@
+@model EmbrOnlineStore.Models.ShopModel
 
 @{
     double cartTotal = 0.0;
-    int itemCount = Model.shoppingCart.Count;
+    int itemCount =0;
 
     foreach (var v in Model.shoppingCart)
     {
         cartTotal += (v.Key.sellingPrice * v.Value);
+        itemCount += v.Value;
     }
 }
-<span class="glyphicon glyphicon-shopping-cart"> Shopping Cart (@itemCount) - $@cartTotal </span>
+
+<span class="glyphicon glyphicon-shopping-cart" onclick="LoadShoppingCart()"> Shopping Cart (@itemCount) - $@cartTotal </span>
+
+
+<script>
+    function LoadShoppingCart() {
+        $("#content_div").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
+        $("#content_div").load('@Url.Action("LoadShoppingCartView", "Home")')
+    };
+
+</script>

@@ -1,3 +1,123 @@
 ﻿@model EmbrOnlineStore.Models.ShopModel
 
-i am the shopping cart
+@* Shopping cart elements adapted from tutorial: https://designmodo.com/shopping-cart-ui/
+    Adapted to use our data and fit our design.*@
+<link href="~/Content/ShoppingCart.css" rel="stylesheet" />
+<h2>Shopping Cart</h2>
+<div class="shopping-cart">
+    <!-- Products -->
+
+    @{
+        if (Model.shoppingCart.Count == 0) // Check if the user actually has items in their cart.
+        {
+            <i>There are no items in your cart.</i>
+        }
+        else
+        {
+            // iterate through each item in shopping cart and display.
+
+            foreach (var item in Model.shoppingCart)
+            {
+
+                <div class="item">
+                    <div class="cart_buttons">
+                        <span class="delete-btn" onclick="RemoveFromCart(@item.Key.itemID)"></span>
+                    </div>
+                    <div class="image">
+                        <img src="@item.Key.imageURL" style="height:100%; width:70%;" alt="" />
+                    </div>
+                    <div class="description">
+                        <span>@item.Key.name</span>
+                        <span> </span>
+                        <span>@item.Key.description</span>
+                    </div>
+                    <div class="quantity">
+                        <button class="plus-btn" type="button" name="button" onclick="ChangeQuantity(@item.Key.itemID, 1)">
+                            <img src="/Content/Images/Shopping Cart/plus.svg" alt="" />
+                        </button>
+                        <input type="text" id="quantity_@item.Key.itemID" name="name" value="@item.Value" disabled="disabled">
+                        <button class="minus-btn" type="button" name="button" onclick="ChangeQuantity(@item.Key.itemID, -1)">
+                            <img src="/Content/Images/Shopping Cart/minus.svg" alt="" />
+                        </button>
+                    </div>
+                    <div class="total-price">$@(item.Value * item.Key.sellingPrice)</div>
+                </div>}
+        } }
+</div>
+<br /><br />
+<div style="width:80%;">
+    <span style="float:right; margin-bottom:5px;"><b> Your Total is: $ @EmbrOnlineStore.Controllers.Utilities.CheckoutFacilitator.GetCartTotal(Model.shoppingCart)</b></span>
+    <br /><div>
+        <span class="input-group-btn " style="float:left;">
+            <button class="btn btn-default" onclick="Back()" type="button">Back</button>
+        </span>
+        <span class="input-group-btn " style="float:right;">
+            <button class="btn btn-primary" onclick="LoadCheckout()" type="button">Proceed to Checkout</button>
+        </span>
+    </div>
+</div>
+@* Scripts to allow editing of cart - removal / editing quantity scripts are in this block.*@
+<script>
+    function ChangeQuantity (itemID, change)
+    {
+        var qty = $("#quantity_" + itemID + "").val();
+        var new_qty = parseInt(qty) + parseInt(change);
+
+        var uri = encodeURI('@Url.Action("EditCartItemQty", "Home")');
+
+        $.ajax({
+            url: uri ,
+            type: "POST",
+            cache: false,
+            data: "{'itemId':'"+itemID+"', 'quantity' : '"+new_qty+"'}",
+            contentType: "application/json",
+            error: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus, /*string*/ errorThrown) {
+                alert(errorThrown);
+            },
+            complete: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus) {
+                $("#shopping_cart_min").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
+                $("#shopping_cart_min").load('@Url.Action("LoadShoppingCartMinimalView", "Home")')
+
+                $("#content_div").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
+                $("#content_div").load('@Url.Action("LoadShoppingCartView", "Home")')
+            }
+
+        });
+    }
+
+    function RemoveFromCart (itemID)
+    {
+        var uri = encodeURI('@Url.Action("DeleteItemFromCart", "Home")');
+
+        $.ajax({
+            url: uri ,
+            type: "POST",
+            cache: false,
+            data: "{'itemId':'"+itemID+"'}",
+            contentType: "application/json",
+            error: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus, /*string*/ errorThrown) {
+                alert(errorThrown);
+            },
+            complete: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus) {
+                $("#shopping_cart_min").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
+                $("#shopping_cart_min").load('@Url.Action("LoadShoppingCartMinimalView", "Home")')
+
+                $("#content_div").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
+                $("#content_div").load('@Url.Action("LoadShoppingCartView", "Home")')
+            }
+
+        });
+    }
+</script>
+
+@* Navigation Scripts - back and checkout buttons*@
+<script>
+    function LoadCheckout() {
+        $("#content_div").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
+        $("#content_div").load('@Url.Action("LoadCheckOutView", "Home")')
+    }
+    function Back() {
+        $("#content_div").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
+        $("#content_div").load('@Url.Action("LoadItemCatalogView", "Home")')
+    }
+</script>

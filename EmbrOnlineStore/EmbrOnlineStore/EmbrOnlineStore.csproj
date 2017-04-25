@@ -151,6 +151,10 @@
     <Content Include="Content\Images\Dummy\3.png" />
     <Content Include="Content\Images\Dummy\4.png" />
     <Content Include="Content\Images\EMBR Banner.png" />
+    <Content Include="Content\Images\Shopping Cart\delete-icn.svg" />
+    <Content Include="Content\Images\Shopping Cart\minus.svg" />
+    <Content Include="Content\Images\Shopping Cart\plus.svg" />
+    <Content Include="Content\ShoppingCart.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -182,6 +186,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\sliiide\sliiide.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
