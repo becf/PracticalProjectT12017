@@ -32,12 +32,13 @@
                         <span>@item.Key.description</span>
                     </div>
                     <div class="quantity">
-                        <button class="plus-btn" type="button" name="button" onclick="ChangeQuantity(@item.Key.itemID, 1)">
-                            <img src="/Content/Images/Shopping Cart/plus.svg" alt="" />
-                        </button>
-                        <input type="text" id="quantity_@item.Key.itemID" name="name" value="@item.Value" disabled="disabled">
                         <button class="minus-btn" type="button" name="button" onclick="ChangeQuantity(@item.Key.itemID, -1)">
                             <img src="/Content/Images/Shopping Cart/minus.svg" alt="" />
+                        </button>
+                        <input type="text" id="quantity_@item.Key.itemID" name="name" value="@item.Value" disabled="disabled">
+
+                        <button class="plus-btn" type="button" name="button" onclick="ChangeQuantity(@item.Key.itemID, 1)">
+                            <img src="/Content/Images/Shopping Cart/plus.svg" alt="" />
                         </button>
                     </div>
                     <div class="total-price">$@(item.Value * item.Key.sellingPrice)</div>

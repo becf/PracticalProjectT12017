@@ -121,6 +121,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Utilities\CheckoutFacilitator.cs" />
+    <Compile Include="Controllers\Utilities\DatabaseFacilitator.cs" />
     <Compile Include="Controllers\Utilities\ItemCatalogFacilitator.cs" />
     <Compile Include="Controllers\Utilities\OrderRetrievalFacilicator.cs" />
     <Compile Include="Controllers\Utilities\TestDataGenerator.cs" />
@@ -209,6 +210,7 @@
     <Content Include="Views\Home\_CheckOutView.cshtml" />
     <Content Include="Views\Home\_ShoppingCartView.cshtml" />
     <Content Include="Views\Home\_ShoppingCartMinimalView.cshtml" />
+    <Content Include="Views\Home\_OrderReceiptMinimal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\NewFolder1\" />

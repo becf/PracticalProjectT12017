@@ -8,22 +8,22 @@ namespace EmbrOnlineStore.Models
 {
     public class Receipt
     {
-        int receiptID { get; set; }
-        Order order { get; set; }
-        Customer customer { get; set; }
-        int totalPrice { get; set; }
-        DateTime billingDate { get; set; }
+        public int receiptID { get; set; }
+        public Order order { get; set; }
+        public Customer customer { get; set; }
+        public int totalPrice { get; set; }
+        public DateTime billingDate { get; set; }
 
         /// <summary>
         /// Empty constructor for Receipt object.
         /// </summary>
-        Receipt() { }
+        public Receipt() { }
         /// <summary>
         /// Constructor that takes an order and a customer and generates a receipt. 
         /// </summary>
         /// <param name="order"></param>
         /// <param name="customer"></param>
-        Receipt(Order order, Customer customer)
+        public Receipt(Order order, Customer customer)
         {
             billingDate = DateTime.Now; // billing date is the date of the creation of the object.
             totalPrice = 0;

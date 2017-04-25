@@ -14,6 +14,12 @@ namespace EmbrOnlineStore.Controllers
             Session["model"] = TestDataGenerator.PopulateDummyModel();
             return View();
         }
+
+        /// <summary>
+        /// HttpPost interface for editing cart item quantity.
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="quantity"></param>
         [HttpPost]
         public void EditCartItemQty(string itemId, string quantity)
         {
@@ -35,6 +41,11 @@ namespace EmbrOnlineStore.Controllers
             }
             Session["model"] = model; // reassign model.
         }
+
+        /// <summary>
+        /// HttpPost interface for deleting an item from the cart
+        /// </summary>
+        /// <param name="itemId"></param>
         [HttpPost]
         public void DeleteItemFromCart(string itemId)
         {
@@ -56,6 +67,12 @@ namespace EmbrOnlineStore.Controllers
             }
             Session["model"] = model; // reassign model.
         }
+       
+        /// <summary>
+        /// HttpPost interface for adding an item to the cart
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="quantity"></param>
         [HttpPost]
         public void AddItemToCart(string itemId, string quantity)
         {
@@ -78,6 +95,47 @@ namespace EmbrOnlineStore.Controllers
             Session["model"] = model; // reassign model.
         }
 
+        /// <summary>
+        /// HttpPost interface for creating an order.
+        /// </summary>
+        /// <param name="firstName"></param>
+        /// <param name="lastName"></param>
+        /// <param name="email"></param>
+        /// <param name="phone"></param>
+        /// <param name="shippingStreet"></param>
+        /// <param name="shippingCity"></param>
+        /// <param name="shippingPostcode"></param>
+        /// <param name="shippingState"></param>
+        /// <param name="billingStreet"></param>
+        /// <param name="billingCity"></param>
+        /// <param name="billingPostcode"></param>
+        /// <param name="billingState"></param>
+        /// <param name="billingMethod"></param>
+        [HttpPost]
+        public void CreateOrder(string firstName, string lastName, string email, string phone, string shippingStreet, string shippingCity,
+            string shippingPostcode, string shippingState, string billingStreet, string billingCity, string billingPostcode, string billingState, string billingMethod)
+        {
+            model = (ShopModel)Session["model"]; // get the model object
+
+            model.currentReceipt = CheckoutFacilitator.CreateOrder(firstName, lastName, email, phone, shippingStreet, shippingCity,
+              shippingPostcode, shippingState, billingStreet, billingCity, billingPostcode, billingState, billingMethod, model);
+
+            //clear cart - we don't need it any more!
+            model.shoppingCart.Clear();
+            Session["model"] = model; // reassign model.
+            
+        }
+
+        /// <summary>
+        /// Loads the minimal order receipt view (displays when order is complete)
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult> LoadOrderReceiptMinimal()
+        {
+            model = (ShopModel)Session["model"];
+            return PartialView("_OrderReceiptMinimal", model);
+        }
         /// <summary>
         /// Loads the minimal shopping cart view (i.e. the cart on top right hand corner)
         /// </summary>

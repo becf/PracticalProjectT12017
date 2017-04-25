@@ -12,13 +12,14 @@
     }
 }
 
-<span class="glyphicon glyphicon-shopping-cart" onclick="LoadShoppingCart()"> Shopping Cart (@itemCount) - $@cartTotal </span>
+<a  href="#" class="glyphicon glyphicon-shopping-cart" onclick="LoadShoppingCart()"> Shopping Cart (@itemCount) - $@cartTotal </a>
 
 
 <script>
     function LoadShoppingCart() {
         $("#content_div").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
         $("#content_div").load('@Url.Action("LoadShoppingCartView", "Home")')
+        //$("#content_div").load('@Url.Action("LoadCheckOutView", "Home")')
     };
 
 </script>

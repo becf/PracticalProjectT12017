@@ -16,7 +16,7 @@ namespace EmbrOnlineStore.Controllers.Utilities
             model.customer = PopulateDummyCustomer();
             model.itemCatalog = PopulateDummyItemCatalog();
             model.shoppingCart = new Dictionary<Item, int>();
-            model.shoppingCart.Add(model.itemCatalog[1], 2);
+            //model.shoppingCart.Add(model.itemCatalog[1], 2);
           
             return model;
         }
