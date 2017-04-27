@@ -11,7 +11,13 @@ namespace EmbrOnlineStore.Controllers
         public ShopModel model;
         public ActionResult Index()
         {
-            Session["model"] = TestDataGenerator.PopulateDummyModel();
+            // get all items test
+
+            //  model= TestDataGenerator.PopulateDummyModel();
+            model = new ShopModel();
+            model.itemCatalog = ItemCatalogFacilitator.GetAllItems();
+            //OrderRetrievalFacilicator.GetOrderByID(5); //test
+            Session["model"] = model;
             return View();
         }
 

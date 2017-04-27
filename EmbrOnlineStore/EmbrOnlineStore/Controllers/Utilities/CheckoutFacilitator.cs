@@ -1,6 +1,8 @@
 ﻿using EmbrOnlineStore.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -98,7 +100,7 @@ namespace EmbrOnlineStore.Controllers.Utilities
 
         /// <summary>
         /// Creates an order in the model and database. Also creates a customer object or retrieves an existing on from the database.
-       ///  Returns a receipt object.
+        ///  Returns a receipt object.
         /// </summary>
         /// <param name="firstName"></param>
         /// <param name="lastName"></param>
@@ -127,7 +129,9 @@ namespace EmbrOnlineStore.Controllers.Utilities
 
             customer.paymentMethod = PayentMethodEnum.PayPal; //make dynamic
 
-            
+            customer.customerID = GetExistingCustomerID(customer);
+            if (customer.customerID == -1)
+               customer.customerID = CreateCustomerInDatabase(customer); // if customer doesn't exist, create it in the db!
 
             // create initial order object
             Order order = new Order();
@@ -147,9 +151,174 @@ namespace EmbrOnlineStore.Controllers.Utilities
             }
 
             //TODO:  Commit to database -- customer and order, then read back order id  / customer id
-
+            order.orderID = CreateOrderInDatabase(order, customer.customerID);
+            if (order.orderID != -1)
+            {
+                // create order line items
+                CreateOrderLineItemsInDatabase(order.orderLineItems, order.orderID);
+            }
+            else
+            {
+                //TODO; THROW NEW EXCEPTION HERE
+            }
             // create a receipt
             return new Receipt(order, customer);
+
+        }
+        /// <summary>
+        /// Check if customer exists in database, if so, return existing customer id.
+        /// </summary>
+        /// <returns></returns>
+        private static int GetExistingCustomerID(Customer customer)
+        {
+            int customerid = -1; ///-1 indicates not found.
+            DatabaseFacilitator database = new DatabaseFacilitator();
+
+            database.ConnectToDatabase(); // connect
+
+            string query = "SELECT [CUSTOMER_ID] FROM [DBO].[Customer] WHERE LOWER([NAME]) = @NAME AND  LOWER([EMAIL]) = @EMAIL AND  LOWER([PHONE]) = @PHONE"; //sql query
+            using (SqlCommand cmd = new SqlCommand(query, database.GetDatabaseConnection())) //create sql command
+            {
+                cmd.Parameters.Add("@NAME", SqlDbType.VarChar, 100).Value = customer.name.ToLower();
+                cmd.Parameters.Add("@EMAIL", SqlDbType.VarChar, 50).Value = customer.email.ToLower();
+                cmd.Parameters.Add("@PHONE", SqlDbType.VarChar, 50).Value = customer.phone.ToLower();
+
+                using (SqlDataReader reader = cmd.ExecuteReader()) // execute query
+                {
+                    while (reader.Read()) // iterate through results
+                    {
+                        customerid = Int32.Parse(reader[0].ToString());
+                    }
+                }
+            }
+            // Close database connection
+
+            database.CloseDatabaseConnection();
+
+            return customerid; // customer exists!
+        }
+
+        /// <summary>
+        /// Create customer entry in database and retun the newly created custome id.
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
+        private static int CreateCustomerInDatabase(Customer customer)
+        {
+            int customerid = -1;
+
+            DatabaseFacilitator database = new DatabaseFacilitator();
+
+            database.ConnectToDatabase(); // connect
+            string query = "INSERT INTO [DBO].[CUSTOMER] (NAME, ADDRESS,BILLING_METHOD, EMAIL, PHONE) " +
+                "VALUES (@NAME, @ADDRESS,@BILLING_METHOD, @EMAIL, @PHONE)";
+
+            using (SqlCommand cmd = new SqlCommand(query, database.GetDatabaseConnection())) //create sql command
+            {
+                cmd.Parameters.Add("@NAME", SqlDbType.VarChar, 100).Value = customer.name;
+                cmd.Parameters.Add("@EMAIL", SqlDbType.VarChar, 50).Value = customer.email;
+                cmd.Parameters.Add("@PHONE", SqlDbType.VarChar, 50).Value = customer.phone;
+                cmd.Parameters.Add("@BILLING_METHOD", SqlDbType.VarChar, 50).Value = customer.paymentMethod;
+                cmd.Parameters.Add("@ADDRESS", SqlDbType.VarChar, 150).Value = customer.address;
+
+                int result = cmd.ExecuteNonQuery();
+            }
+            // Close database connection
+
+            database.CloseDatabaseConnection();
+
+            return GetExistingCustomerID(customer);
+        }
+
+        private static int CreateOrderInDatabase(Order order, int customerID)
+        {
+             DatabaseFacilitator database = new DatabaseFacilitator();
+
+            database.ConnectToDatabase(); // connect
+          
+            string query = "INSERT INTO [DBO].[ORDER] (DATE, STATUS,DELIVERY_ADDRESS, CUSTOMER_ID) " +
+                "VALUES (@DATE, @STATUS,@DELIVERY_ADDRESS, @CUSTOMER_ID)";
+
+            using (SqlCommand cmd = new SqlCommand(query, database.GetDatabaseConnection())) //create sql command
+            {
+                cmd.Parameters.Add("@DATE", SqlDbType.DateTime, 100).Value = order.date;
+                cmd.Parameters.Add("@STATUS", SqlDbType.VarChar, 25).Value = order.status;
+                cmd.Parameters.Add("@DELIVERY_ADDRESS", SqlDbType.VarChar,150).Value = order.deliveryAddress;
+                cmd.Parameters.Add("@CUSTOMER_ID", SqlDbType.VarChar, 50).Value = customerID;
+
+                int result = cmd.ExecuteNonQuery();
+            }
+            // Close database connection
+
+            database.CloseDatabaseConnection();
+
+            return GetExistingOrderID(order, customerID);
+        }
+
+        /// <summary>
+        /// Check if order exists in database, if so, return existing order id.
+        /// </summary>
+        /// <returns></returns>
+        private static int GetExistingOrderID(Order order, int customerID)
+        {
+            int orderid = -1; ///-1 indicates not found.
+            DatabaseFacilitator database = new DatabaseFacilitator();
+
+            database.ConnectToDatabase(); // connect
+
+            string query = "SELECT [ORDER_ID] FROM [DBO].[order] WHERE [DATE] = @DATE AND  LOWER([STATUS]) = @STATUS AND  LOWER([DELIVERY_ADDRESS]) = @DELIVERY_ADDRESS AND CUSTOMER_ID = @CUSTOMER_ID"; //sql query
+            using (SqlCommand cmd = new SqlCommand(query, database.GetDatabaseConnection())) //create sql command
+            {
+                cmd.Parameters.Add("@DATE", SqlDbType.DateTime, 100).Value = order.date;
+                cmd.Parameters.Add("@STATUS", SqlDbType.VarChar, 25).Value = order.status;
+                cmd.Parameters.Add("@DELIVERY_ADDRESS", SqlDbType.VarChar, 150).Value = order.deliveryAddress;
+                cmd.Parameters.Add("@CUSTOMER_ID", SqlDbType.VarChar, 50).Value = customerID;
+
+                using (SqlDataReader reader = cmd.ExecuteReader()) // execute query
+                {
+                    while (reader.Read()) // iterate through results
+                    {
+                        orderid = Int32.Parse(reader[0].ToString());
+                    }
+                }
+            }
+            // Close database connection
+
+            database.CloseDatabaseConnection();
+
+            return orderid; // customer exists!
+        }
+
+        /// <summary>
+        /// Using the existing order line items and newly created order id, insert
+        /// the order line items into the database. Force references the item ID / order ID
+        /// foreign key
+        /// </summary>
+        /// <param name="lineItems"></param>
+        /// <param name="orderID"></param>
+        private static void CreateOrderLineItemsInDatabase(List<OrderLine> lineItems, int orderID)
+        {
+            DatabaseFacilitator database = new DatabaseFacilitator();
+
+            database.ConnectToDatabase(); // connect
+          
+            // foreach line item in order line items, add to database one by one.
+            foreach (var line in lineItems)
+            {
+                string query = "INSERT INTO [DBO].[ORDER_LINE_ITEM] (ORDER_ID, ITEM_ID,QUANTITY, PRICE) " +
+                    "VALUES (@ORDER_ID, @ITEM_ID,@QUANTITY, @PRICE)";
+
+                using (SqlCommand cmd = new SqlCommand(query, database.GetDatabaseConnection())) //create sql command
+                {
+                    cmd.Parameters.Add("@ORDER_ID", SqlDbType.Int, 50).Value = orderID;
+                    cmd.Parameters.Add("@ITEM_ID", SqlDbType.Int, 50).Value = line.item.itemID;
+                    cmd.Parameters.Add("@QUANTITY", SqlDbType.Int, 50).Value = line.quantity ;
+                    cmd.Parameters.Add("@PRICE", SqlDbType.Decimal, 50).Value = line.price;
+                    int result = cmd.ExecuteNonQuery();
+                }
+                // Close database connection
+            }
+            database.CloseDatabaseConnection();
 
         }
     }

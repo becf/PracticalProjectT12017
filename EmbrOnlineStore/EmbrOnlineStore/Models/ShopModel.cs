@@ -12,7 +12,10 @@ namespace EmbrOnlineStore.Models
         /// <summary>
         /// Default constructors for ShopModel
         /// </summary>
-       public ShopModel() { }
+       public ShopModel() {
+            itemCatalog = new List<Item>();
+            shoppingCart = new Dictionary<Item, int>();
+        }
 
      public   ShopModel(ShopModel shopModel) { }
 
