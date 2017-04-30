@@ -211,6 +211,8 @@
     <Content Include="Views\Home\_ShoppingCartView.cshtml" />
     <Content Include="Views\Home\_ShoppingCartMinimalView.cshtml" />
     <Content Include="Views\Home\_OrderReceiptMinimal.cshtml" />
+    <Content Include="Views\Home\_OrderSearchResults.cshtml" />
+    <Content Include="Views\Home\_CatalogItemsView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\NewFolder1\" />

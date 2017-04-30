@@ -1,3 +1,35 @@
 ﻿@model EmbrOnlineStore.Models.ShopModel
 
-hello hello order status view
+<input type="number" id="order_id_input"class="input" style="margin-right:10px;"/><button id="order_id_button" class="btn btn-primary" onclick="SearchForItem()">Search</button>
+
+
+<div id="order_search_results">
+ 
+</div>
+
+
+
+<script>
+    function SearchForItem()
+    {
+
+        var order_id = $('#order_id_input').val();
+        var uri = encodeURI('@Url.Action("RetrieveOrder", "Home")');
+
+        $.ajax({
+            url: uri,
+            type: "POST",
+            cache: false,
+            data: "{'orderID':'" + order_id +"'}",
+            contentType: "application/json",
+            error: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus, /*string*/ errorThrown) {
+                alert(errorThrown);
+            },
+            complete: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus) {
+                $("#order_search_results").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />');
+                $("#order_search_results").load('@Url.Action("LoadOrderSearchResultsView", "Home")')
+            }
+
+        });
+    }
+</script>

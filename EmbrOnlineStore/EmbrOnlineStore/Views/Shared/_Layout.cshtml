@@ -9,16 +9,53 @@
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
+    <script>
+        function LoadCheckOrderStatus()
+        {
+            $("#content_div").html('<img src="~/Content/Images/ajax-loader.gif" style="align-content:center;" />');
+            $("#content_div").load('@Url.Action("LoadOrderStatusView", "Home")')
 
+        }
+
+    </script>
 </head>
 <body>
 
-    <div class="banner" style="padding-bottom:50px;">
+    <div class="banner" style="top:0px;">
 
         <a href="@Url.Action("Index","Home")">
-            <img src="~/Content/Images/EMBR Banner.png" />
+            <img src="~/Content/Images/EMBR Banner.png" style="height:70%;" />
         </a>
     </div>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="@Url.Action("Index", "Home")">Shop<span class="sr-only">(current)</span></a></li>
+                    <li><a href="#" onclick="LoadCheckOrderStatus();">Check Order Status</a></li>
+                   
+                </ul>
+                <form class="navbar-form navbar-right">
+                    <div class="form-group">
+                        <input type="text"id="search_terms" class="form-control" placeholder="Search">
+                    </div>
+                    <button onclick="SearchItems()" class="btn btn-default">Submit</button> <div id="shopping_cart_min"class="form-control btn-primary" style="margin-left:5px; " />
+                </form>
+                
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -31,5 +68,33 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script>
+    $(document).ready(function () {
+        $("#shopping_cart_min").load('@Url.Action("LoadShoppingCartMinimalView", "Home")')
+    });
+        function SearchItems() {
+            var search_terms = $("#search_terms").val();
+
+            var uri = encodeURI('@Url.Action("SearchItems", "Home")');
+
+            $.ajax({
+                url: uri,
+                type: "POST",
+                cache: false,
+                data: "{'searchTerm':'" + search_terms + "'}",
+                contentType: "application/json",
+                error: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus, /*string*/ errorThrown) {
+                    alert(textStatus);
+                },
+                complete: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus) {
+                    $("#content_div").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
+
+                   $("#content_div").load('@Url.Action("LoadItemCatalogView", "Home")')
+
+                }
+
+            });
+        }
+    </script>
 </body>
 </html>

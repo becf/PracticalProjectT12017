@@ -1,6 +1,7 @@
 ﻿using EmbrOnlineStore.Controllers.Utilities;
 using EmbrOnlineStore.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -11,8 +12,8 @@ namespace EmbrOnlineStore.Controllers
         public ShopModel model;
         public ActionResult Index()
         {
-            // get all items test
-
+            
+             Session["fromSearch"] = false;
             //  model= TestDataGenerator.PopulateDummyModel();
             model = new ShopModel();
             model.itemCatalog = ItemCatalogFacilitator.GetAllItems();
@@ -101,6 +102,76 @@ namespace EmbrOnlineStore.Controllers
             Session["model"] = model; // reassign model.
         }
 
+        [HttpPost]
+        public void RetrieveOrder(string orderID)
+        {
+            ShopModel model = (ShopModel)Session["model"];
+            model.currentOrder =  OrderRetrievalFacilicator.GetOrderByID(Int32.Parse(orderID));
+            Session["model"] = model;
+        }
+        /// <summary>
+        /// Orders the item catalog and saves to model.
+        /// </summary>
+        /// <param name="orderBy"></param>
+        [HttpPost]
+        public void OrderItemsCatalog(string orderBy)
+        {
+            ShopModel model = (ShopModel)Session["model"];
+
+            ItemCatalogFacilitator.ItemSorttype type = ItemCatalogFacilitator.ItemSorttype.NAME_AZ;
+            switch (orderBy)
+            {
+                case "PRICE_HL":
+                    type = ItemCatalogFacilitator.ItemSorttype.PRICE_HL;
+                    break;
+                case "PRICE_LH":
+                    type = ItemCatalogFacilitator.ItemSorttype.PRICE_LH;
+                    break;
+                case "NAME_AZ":
+                    type = ItemCatalogFacilitator.ItemSorttype.NAME_AZ;
+                    break;
+                case "NAME_ZA":
+                    type = ItemCatalogFacilitator.ItemSorttype.NAME_ZA;
+                    break;
+            }
+        model.itemCatalog =    ItemCatalogFacilitator.OrderItems(type, model.itemCatalog);
+            Session["model"] = model;
+        }
+        /// <summary>
+        /// Filters (by category) the item catalog and saves to model.
+        /// </summary>
+        /// <param name="categories"></param>
+        [HttpPost]
+        public void FilterItemsByCategory(string categories)
+        {
+            ShopModel model = (ShopModel)Session["model"];
+
+
+            model.itemCatalog = ItemCatalogFacilitator.GetAllItems();
+            List<string> catList = new List<string>();
+            string[] cat = categories.Split(',');
+            for (int i = 0; i < cat.Length; i++)
+                catList.Add(cat[i]);
+
+
+            model.itemCatalog = ItemCatalogFacilitator.FilterItemsByCategory(catList, model.itemCatalog); 
+            Session["model"] = model;
+        }
+        /// <summary>
+        /// Searches for items that contain a search stringand saves them to model.
+        /// </summary>
+        /// <param name="searchTerm"></param>
+        [HttpPost]
+        public void SearchItems(string searchTerm)
+        {
+            ShopModel model = (ShopModel)Session["model"];
+            Session["searchTerm"] = searchTerm;
+
+            model.itemCatalog = ItemCatalogFacilitator.GetAllItems(); // reset
+            model.itemCatalog = ItemCatalogFacilitator.SearchItems(searchTerm, model.itemCatalog);
+            Session["fromSearch"] = true;
+            Session["model"] = model;
+        }
         /// <summary>
         /// HttpPost interface for creating an order.
         /// </summary>
@@ -194,6 +265,27 @@ namespace EmbrOnlineStore.Controllers
         {
             model = (ShopModel)Session["model"];
             return PartialView("_OrderStatusView", model);
+        }
+        /// <summary>
+        /// Loads the Order seardch results partial view.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult> LoadOrderSearchResultsView()
+        {
+            model = (ShopModel)Session["model"];
+            return PartialView("_OrderSearchResults", model);
+        }
+
+        /// <summary>
+        /// Loads just the item catalog table
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult> LoadCatalogItems()
+        {
+            model = (ShopModel)Session["model"];
+            return PartialView("_CatalogItemsView", model);
         }
         public ActionResult About()
         {
