@@ -11,9 +11,74 @@
     * FILE DESCRIPTION: Partial view for facilitating a check out process for the customer. Contains all
     *                   form elements required to populate and process an order.
     ********************************************************************************************************/*@
-
+    
 @model EmbrOnlineStore.Models.ShopModel
+@*Box shadow for minimal cart adapted from https://paulund.co.uk/learn-css-box-shadow*@
+<style>
+  .box {
+        width: 70%;
+        
+        background: #FFF;
+        margin: 40px auto;
+    }
 
+    .effect8 {
+        position: relative;
+        border-radius: 25px;
+        padding:10px;
+
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    }
+
+        .effect8:before, .effect8:after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            top: 10px;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            border-radius: 100px / 10px;
+        }
+
+        .effect8:after {
+            right: 10px;
+            left: auto;
+            transform: skew(8deg) rotate(3deg);
+        }
+        div.shopping {
+  
+}
+ 
+ul.shopping {
+  list-style-type: none;
+  width: 500px;
+}
+ 
+h3.shopping {
+  font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
+}
+ 
+li img.shopping {
+  float: left;
+  margin: 0 15px 0 0;
+}
+ 
+li p.shopping {
+  font: 200 12px/1.5 Georgia, Times New Roman, serif;
+}
+ 
+li.shopping {
+  padding: 0px;
+  overflow: auto;
+}
+ 
+li:hover.shopping {
+  background: #eee;
+  cursor: pointer;
+}
+</style>
 @*Start check out form*@
 <div id="checkout_container" style="width:90vw; display: flex; ">
     <div id="checkout_form" style="float:left; height:100%; width:60%;align-items: stretch; padding:10px;">
@@ -145,17 +210,23 @@
         </div>
     </div>
     @*Mini shopping cart view*@
-    <div id="checkout_shopping_cart" style="float:right; margin-left:50px; background-color:orange; height:30%; width:20%;">
+    <div id="checkout_shopping_cart" class="box effect8" style="float:right; background-color:white; margin-left:30px; padding-bottom:20px; top:0; height:30%; width:25%;">
         <h4>Shopping Cart</h4>
 
-        <ul>
-            @{ foreach (var cart in Model.shoppingCart)
-                {
-                    <li>@cart.Key.name ---- $@cart.Value</li>
-                }
-            }
-        </ul>
+        <div class="shopping">
+                @{ foreach (var cart in Model.shoppingCart)
+                    {
+                      
+                            <span style="float:left;"> <img src="@cart.Key.imageURL" style="width:20px; height:20px;" />@cart.Key.name (@cart.Value)</span><span style="float:right; font-weight:bold;">$@(cart.Value*cart.Key.sellingPrice)</span>
+                          <br /><br />
+                            <p><i>@cart.Key.description</i></p>
+                      <br />    
 
+                    }
+                }
+         
+        </div>
+        <span style="float:right; font-weight:bold;">Total: $@EmbrOnlineStore.Controllers.Utilities.CheckoutFacilitator.GetCartTotal(Model.shoppingCart) AUD</span>
     </div>
 </div>
 
