@@ -1,0 +1,15 @@
+﻿@model EmbrOnlineStore.Models.ShopModel
+
+@{
+    if (Model.currentOrder == null)
+    {
+        // no order found
+        <text><i>No order has been found. Check your order ID and try again.</i></text>
+    }
+    else
+    {
+
+        <span>  <b>OrderDate:</b> @Model.currentOrder.date.ToString();</span>
+        <b>Rebecca to do - populate results table.</b>
+    }
+}
