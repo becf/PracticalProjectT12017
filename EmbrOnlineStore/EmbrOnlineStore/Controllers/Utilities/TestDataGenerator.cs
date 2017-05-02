@@ -1,13 +1,9 @@
 ﻿using EmbrOnlineStore.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmbrOnlineStore.Controllers.Utilities
 {
-   public  abstract class TestDataGenerator
+    public  abstract class TestDataGenerator
     {
         public static ShopModel PopulateDummyModel()
         {

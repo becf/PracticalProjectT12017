@@ -1,16 +1,31 @@
-﻿@model EmbrOnlineStore.Models.ShopModel
+﻿@*/*******************************************************************************************************
+    * SIT782 - PRACTICAL PROJECT T1 2017
+    *
+    * GROUP 13:
+    *           1. REBECCA FRITH (ID: 213582268)
+    *           2. ERIC GRIGSON (ID: 212415996)
+    *           3. BENJAMIN FRIEBE (ID: 217109315)
+    *
+    * ------------------------------------------------------------------------------------------------------
+    * FILE NAME:        _OrderStatusView.cshtml
+    * FILE DESCRIPTION: Allows users to search for an existing order and displays the receipt in the 
+    *                   order_search_results container.
+    ********************************************************************************************************/*@
+@model EmbrOnlineStore.Models.ShopModel
 
-<input type="number" id="order_id_input"class="input" style="margin-right:10px;"/><button id="order_id_button" class="btn btn-primary" onclick="SearchForItem()">Search</button>
+@*Inputs for searching*@
+<input type="number" id="order_id_input"class="input" style="margin-right:10px;"/><button id="order_id_button" class="btn btn-primary" onclick="SearchForOrder()">Search</button>
 
 
 <div id="order_search_results">
- 
+ @*Results of search here*@
 </div>
 
 
 
 <script>
-    function SearchForItem()
+    @*Makes an AJAX call to server to try and find existing Order. On success it loads it in the container.*@
+    function SearchForOrder()
     {
 
         var order_id = $('#order_id_input').val();

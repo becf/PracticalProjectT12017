@@ -1,4 +1,21 @@
-﻿using EmbrOnlineStore.Controllers.Utilities;
+﻿/*******************************************************************************************************
+* SIT782 - PRACTICAL PROJECT T1 2017
+*
+* GROUP 13:
+*           1. REBECCA FRITH (ID: 213582268)
+*           2. ERIC GRIGSON (ID: 212415996)
+*           3. BENJAMIN FRIEBE (ID: 217109315)    
+*
+* ------------------------------------------------------------------------------------------------------
+* FILE NAME:        HomeController.cs
+* FILE DESCRIPTION: This is the Controller aspect of the MVC pattern. It contains all functionality
+*                   to render each of the Views and partial views required for the online shop.
+*                   Detailed functionality (such as database connectivity) is farmed out to the 
+*                   classes in the Utilities folder.
+*
+********************************************************************************************************/
+
+using EmbrOnlineStore.Controllers.Utilities;
 using EmbrOnlineStore.Models;
 using System;
 using System.Collections.Generic;
@@ -10,6 +27,12 @@ namespace EmbrOnlineStore.Controllers
     public class HomeController : Controller
     {
         public ShopModel model;
+        /// <summary>
+        /// Loads the main Index view. 
+        /// 
+        /// Creates a new model and loads the item catalog from the database.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             
@@ -17,7 +40,6 @@ namespace EmbrOnlineStore.Controllers
             //  model= TestDataGenerator.PopulateDummyModel();
             model = new ShopModel();
             model.itemCatalog = ItemCatalogFacilitator.GetAllItems();
-            //OrderRetrievalFacilicator.GetOrderByID(5); //test
             Session["model"] = model;
             return View();
         }
@@ -287,18 +309,6 @@ namespace EmbrOnlineStore.Controllers
             model = (ShopModel)Session["model"];
             return PartialView("_CatalogItemsView", model);
         }
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
+       
     }
 }

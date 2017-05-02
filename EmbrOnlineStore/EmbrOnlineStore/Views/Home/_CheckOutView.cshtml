@@ -1,5 +1,20 @@
-﻿@model EmbrOnlineStore.Models.ShopModel
+﻿@*/*******************************************************************************************************
+    * SIT782 - PRACTICAL PROJECT T1 2017
+    *
+    * GROUP 13:
+    *           1. REBECCA FRITH (ID: 213582268)
+    *           2. ERIC GRIGSON (ID: 212415996)
+    *           3. BENJAMIN FRIEBE (ID: 217109315)
+    *
+    * ------------------------------------------------------------------------------------------------------
+    * FILE NAME:        _CheckOutView.cshtml
+    * FILE DESCRIPTION: Partial view for facilitating a check out process for the customer. Contains all
+    *                   form elements required to populate and process an order.
+    ********************************************************************************************************/*@
 
+@model EmbrOnlineStore.Models.ShopModel
+
+@*Start check out form*@
 <div id="checkout_container" style="width:90vw; display: flex; ">
     <div id="checkout_form" style="float:left; height:100%; width:60%;align-items: stretch; padding:10px;">
         <div>
@@ -8,7 +23,7 @@
                     <div class="alert alert-danger" id="error"><span class="glyphicon glyphicon-alert"></span><strong> Error! Please check the inputs. (If form error!)</strong></div>
                     <div class="alert alert-info"><span class="glyphicon glyphicon-alert"></span><strong> Fields with a * indicate mandatory fields.</strong></div>
 
-                 </div>
+                </div>
             </div>
             <h4>Customer Information</h4>
             <div class="input-group">
@@ -24,8 +39,8 @@
                 <input type="text" class="form-control required" id="form_email" />
             </div>
 
-           
-           
+
+
             <div class="input-group">
                 <label for="form_phone">Phone Number <span style="color:red;">*</span></label>
                 <input type="text" class="form-control required" id="form_phone" />
@@ -45,7 +60,7 @@
 
             <input id="shipping_city" name="address-line1" type="text"
                    class="input-xlarge form-control required" />
-        </div>   
+        </div>
         <div class="input-group">
             <label class="control-label" for="shipping_postcode">Postcode<span style="color:red;">*</span></label>
 
@@ -72,10 +87,10 @@
             <input id="billing_addr_flag" name="address-line1" type="checkbox"
                    class="" /><label style="font-weight:normal;" for="billing_addr_flag">Billing Address is same as shipping</label>
 
-           
-        </div>  
+
+        </div>
         <div id="billing_addr">
- 
+
             <h4 style="font-weight:normal">Billing Address</h4>
             <div class="input-group">
                 <label class="control-label" for="billing_addr1">Street Address<span style="color:red;">*</span></label>
@@ -110,13 +125,13 @@
                 </select>
             </div>
         </div>
-
+        @*Billing method*@
         <h4>Billing Method</h4>
         <label class="radio-inline"><input type="radio" id="paypal" name="payradio" checked="checked">Paypal</label>
-        <label class="radio-inline"><input type="radio"id="credit_card" name="payradio">Credit Card</label>
+        <label class="radio-inline"><input type="radio" id="credit_card" name="payradio">Credit Card</label>
 
         <br />
-
+        @*Cart totals and checkout buttons*@
         <div style="width:80%;">
             <span style="float:right; margin-bottom:5px;"><b> Your Total is: $ @EmbrOnlineStore.Controllers.Utilities.CheckoutFacilitator.GetCartTotal(Model.shoppingCart)</b></span>
             <br /><div>
@@ -129,7 +144,7 @@
             </div>
         </div>
     </div>
-
+    @*Mini shopping cart view*@
     <div id="checkout_shopping_cart" style="float:right; margin-left:50px; background-color:orange; height:30%; width:20%;">
         <h4>Shopping Cart</h4>
 
@@ -144,29 +159,30 @@
     </div>
 </div>
 
-
+@*Receipt view container*@
 <div id="order_complete" style="width:70%; height:500px;">
-   
+
 </div>
 
 
 <script>
     $(document).ready(function () {
+        @*Initialise form*@
         $('#billing_addr_flag').prop('checked', true);
         $('#billing_addr').hide();
         $('#order_complete').hide();
         $('#error').hide();
         $('input#billing_addr_flag').change(
     function () {
+        @*Toggle billing address info based on whether the shipping address is the same or not*@
         if ($(this).is(':checked')) {
             $('#billing_addr').hide();
         }
-        else
-        {
+        else {
             $('#billing_addr').show();
         }
     });
-    }); 
+    });
 </script>
 
 @* Navigation & Submission Scripts - back and submit order buttons*@
@@ -175,7 +191,7 @@
     function ValidateFields() {
         // add field validation here
     }
-
+    @*Javascript to submit an order to server using HTTP put AJAX call*@
     function SubmitOrder() {
 
         ValidateFields();
@@ -208,7 +224,7 @@
         var billing_method = $("input:radio[name='payradio']:checked").val();
 
         // create the order
-       
+
         var uri = encodeURI('@Url.Action("CreateOrder", "Home")');
 
         $.ajax({
@@ -223,7 +239,7 @@
                 alert(errorThrown);
             },
             complete: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus) {
-      
+
                 $("#checkout_container").hide(); // hide form - checkout is complete!
                 $("#order_complete").show(); // show receipt confirmation
                 $("#order_complete").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
@@ -231,12 +247,12 @@
                 // reload shopping cart indicator
                 $("#shopping_cart_min").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
                 $("#shopping_cart_min").load('@Url.Action("LoadShoppingCartMinimalView", "Home")')
-              @* $("#content_div").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
-                $("#content_div").load('@Url.Action("LoadShoppingCartView", "Home")') *@
+
             }
 
         });
     }
+    @*Go back to item catalog*@
     function Back() {
         $("#content_div").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
         $("#content_div").load('@Url.Action("LoadItemCatalogView", "Home")')

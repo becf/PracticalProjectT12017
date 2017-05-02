@@ -1,4 +1,16 @@
-﻿using System;
+﻿/*******************************************************************************************************
+* SIT782 - PRACTICAL PROJECT T1 2017
+*
+* GROUP 13:
+*           1. REBECCA FRITH (ID: 213582268)
+*           2. ERIC GRIGSON (ID: 212415996)
+*           3. BENJAMIN FRIEBE (ID: 217109315)    
+*
+* ------------------------------------------------------------------------------------------------------
+* FILE NAME:        ITEM.CS
+* FILE DESCRIPTION: Data structure for Item object. Closely mimics the database structure.
+********************************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;

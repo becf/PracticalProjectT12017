@@ -1,11 +1,22 @@
-﻿using EmbrOnlineStore.Models;
+﻿/*******************************************************************************************************
+* SIT782 - PRACTICAL PROJECT T1 2017
+*
+* GROUP 13:
+*           1. REBECCA FRITH (ID: 213582268)
+*           2. ERIC GRIGSON (ID: 212415996)
+*           3. BENJAMIN FRIEBE (ID: 217109315)    
+*
+* ------------------------------------------------------------------------------------------------------
+* FILE NAME:        ORDERRETRIEVALFACILITATOR.CS
+* FILE DESCRIPTION: Facilitates the retrieval of existing orders from the database.
+*                   Allows user to get orders or customers by IDs or get all order line items for
+*                   an existing order.
+********************************************************************************************************/
+using EmbrOnlineStore.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmbrOnlineStore.Controllers.Utilities
 {
@@ -143,7 +154,7 @@ namespace EmbrOnlineStore.Controllers.Utilities
                         customer.customerID = Int32.Parse(reader[0].ToString()); // get customer ID                                                                      
                         customer.name = reader[1].ToString();
                         customer.address = reader[2].ToString();
-                         switch (reader[3].ToString())
+                        switch (reader[3].ToString())
                         {
                             case "PayPal":
                                 customer.paymentMethod = PayentMethodEnum.PayPal; break;

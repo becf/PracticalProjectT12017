@@ -1,7 +1,20 @@
-﻿@* Slide out shopping cart by https://github.com/ahmedrad/sliiide*@
+﻿@*/*******************************************************************************************************
+    * SIT782 - PRACTICAL PROJECT T1 2017
+    *
+    * GROUP 13:
+    *           1. REBECCA FRITH (ID: 213582268)
+    *           2. ERIC GRIGSON (ID: 212415996)
+    *           3. BENJAMIN FRIEBE (ID: 217109315)
+    *
+    * ------------------------------------------------------------------------------------------------------
+    * FILE NAME:        _ShoppingCartMinimaLView.cshtml
+    * FILE DESCRIPTION: Displays the shopping cart as a small icon with a badge indicating the item count.
+    *                   TODO: Allow hovering to view items.
+    ********************************************************************************************************/*@
 @model EmbrOnlineStore.Models.ShopModel
 
 @{
+    // Get shopping cart total
     double cartTotal = 0.0;
     int itemCount =0;
 
@@ -13,29 +26,16 @@
 }
 <style>
 </style>
+@*Show shoping cart information*@
     <span id="shopping_cart" onclick="LoadShoppingCart()"><span class="glyphicon glyphicon-shopping-cart">  </span> <span class="badge bg-success">@itemCount</span>    </span>
 
 
 <!--onclick="LoadShoppingCart()-->
 
 <script>
+    @*Go to shopping cart*@
     function LoadShoppingCart() {
         $("#content_div").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
         $("#content_div").load('@Url.Action("LoadShoppingCartView", "Home")')
-        //$("#content_div").load('@Url.Action("LoadCheckOutView", "Home")')
     };
-    (function () {
-
-        $('#min_cart').hide();
-
-
-
-    })();
-
-    function ShowCart() {
-        $('#min_cart').show();
-    }
-    function HideCart() {
-        $('#min_cart').hide();
-    }
 </script>

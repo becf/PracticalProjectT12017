@@ -1,11 +1,23 @@
-﻿using EmbrOnlineStore.Models;
+﻿/*******************************************************************************************************
+* SIT782 - PRACTICAL PROJECT T1 2017
+*
+* GROUP 13:
+*           1. REBECCA FRITH (ID: 213582268)
+*           2. ERIC GRIGSON (ID: 212415996)
+*           3. BENJAMIN FRIEBE (ID: 217109315)    
+*
+* ------------------------------------------------------------------------------------------------------
+* FILE NAME:        ITEMCATALOGFACILITATOR.CS
+* FILE DESCRIPTION: Facilitates the retrieval and organisation of items within the item catalog. 
+*                   Allows user to get items by an ID or sort / filter existing item catalogs for
+*                   display.
+********************************************************************************************************/
+using EmbrOnlineStore.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmbrOnlineStore.Controllers.Utilities
 {
@@ -127,6 +139,8 @@ namespace EmbrOnlineStore.Controllers.Utilities
             }
             return filtered;
         }
+
+        
         /// <summary>
         /// Uses LINQ queries to sort a list based on a sort type and the original list.
         /// </summary>
@@ -136,23 +150,28 @@ namespace EmbrOnlineStore.Controllers.Utilities
         public static List<Item> OrderItems(ItemSorttype orderBy, List<Item> originalList  )
         {
             List<Item> sortedList = new List<Item>();
+            // use linq queries to order by whichever ItemSortType is specified.
             switch (orderBy)
             {
                 case ItemSorttype.NAME_AZ:
+                    // order alphabetically, A-Z
                     sortedList = originalList.OrderBy(o => o.name).ToList();
-
                     break;
                 case ItemSorttype.NAME_ZA:
+                    // order alphabetically, Z-A
                     sortedList = originalList.OrderByDescending(o => o.name).ToList();
                     break;
                 case ItemSorttype.PRICE_LH:
+                    // order by price, Low - High
                     sortedList = originalList.OrderBy(o => o.sellingPrice).ToList();
                     break;
                 case ItemSorttype.PRICE_HL:
+                    // order by price, High - Low
                     sortedList = originalList.OrderByDescending(o => o.sellingPrice).ToList();
                     break;
 
             }
+            // return new list
             return sortedList;
         }
 

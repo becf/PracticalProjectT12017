@@ -1,4 +1,16 @@
-﻿@model EmbrOnlineStore.Models.ShopModel
+﻿@*/*******************************************************************************************************
+    * SIT782 - PRACTICAL PROJECT T1 2017
+    *
+    * GROUP 13:
+    *           1. REBECCA FRITH (ID: 213582268)
+    *           2. ERIC GRIGSON (ID: 212415996)
+    *           3. BENJAMIN FRIEBE (ID: 217109315)
+    *
+    * ------------------------------------------------------------------------------------------------------
+    * FILE NAME:        _ShoppingCartView.cshtml
+    * FILE DESCRIPTION: Displays shopping cart and allows a user to add or remove items ffrom their basket.
+    ********************************************************************************************************/*@
+@model EmbrOnlineStore.Models.ShopModel
 
 @* Shopping cart elements adapted from tutorial: https://designmodo.com/shopping-cart-ui/
     Adapted to use our data and fit our design.*@
@@ -59,18 +71,17 @@
 </div>
 @* Scripts to allow editing of cart - removal / editing quantity scripts are in this block.*@
 <script>
-    function ChangeQuantity (itemID, change)
-    {
+    function ChangeQuantity(itemID, change) {
         var qty = $("#quantity_" + itemID + "").val();
         var new_qty = parseInt(qty) + parseInt(change);
 
         var uri = encodeURI('@Url.Action("EditCartItemQty", "Home")');
 
         $.ajax({
-            url: uri ,
+            url: uri,
             type: "POST",
             cache: false,
-            data: "{'itemId':'"+itemID+"', 'quantity' : '"+new_qty+"'}",
+            data: "{'itemId':'" + itemID + "', 'quantity' : '" + new_qty + "'}",
             contentType: "application/json",
             error: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus, /*string*/ errorThrown) {
                 alert(errorThrown);
@@ -85,16 +96,15 @@
 
         });
     }
-
-    function RemoveFromCart (itemID)
-    {
+    @*Remove item from cart*@
+    function RemoveFromCart(itemID) {
         var uri = encodeURI('@Url.Action("DeleteItemFromCart", "Home")');
 
         $.ajax({
-            url: uri ,
+            url: uri,
             type: "POST",
             cache: false,
-            data: "{'itemId':'"+itemID+"'}",
+            data: "{'itemId':'" + itemID + "'}",
             contentType: "application/json",
             error: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus, /*string*/ errorThrown) {
                 alert(errorThrown);

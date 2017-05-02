@@ -1,11 +1,25 @@
-﻿@model EmbrOnlineStore.Models.ShopModel
+﻿@*/*******************************************************************************************************
+    * SIT782 - PRACTICAL PROJECT T1 2017
+    *
+    * GROUP 13:
+    *           1. REBECCA FRITH (ID: 213582268)
+    *           2. ERIC GRIGSON (ID: 212415996)
+    *           3. BENJAMIN FRIEBE (ID: 217109315)
+    *
+    * ------------------------------------------------------------------------------------------------------
+    * FILE NAME:        _ItemCatalogView.cshtml
+    * FILE DESCRIPTION: Partial view to display the item catalog and its functionality - such as
+    *                   filtering or sorting of items.
+    ********************************************************************************************************/*@
+@model EmbrOnlineStore.Models.ShopModel
 
 <script src="~/Scripts/bootstrap.js"></script>
 <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
 <h2>Item Catalogue</h2>
 
 <div style="height:1000px">
-    @{ 
+    @*If user is coming from search we will indicate that they are viewing search terms*@
+    @{
         if (Session["fromSearch"] != null && Session["searchTerm"] != null)
         {
             if ((bool)Session["fromSearch"] == true)
@@ -22,12 +36,13 @@
         </button>
         <ul class="dropdown-menu" id="sort_drop_down" aria-labelledby="dropdownMenu2">
             <li><a href="#" onclick="SortItems('PRICE_HL')">Price - High to Low </a></li>
-            <li><a href="#"onclick="SortItems('PRICE_LH')">Price - Low to High </a></li>
-            <li><a href="#"onclick="SortItems('NAME_AZ')">Name - A to Z </a></li>
-            <li><a href="#"onclick="SortItems('NAME_ZA')">Name - Z to A </a></li>
+            <li><a href="#" onclick="SortItems('PRICE_LH')">Price - Low to High </a></li>
+            <li><a href="#" onclick="SortItems('NAME_AZ')">Name - A to Z </a></li>
+            <li><a href="#" onclick="SortItems('NAME_ZA')">Name - Z to A </a></li>
         </ul>
     </div>
     <br /><br />
+    @*Category filters*@
     <div id="filters" style="float:left; width:15%; top:50px; height:20%; border: solid 1px #d1cccc; background-color:white; padding:5px; overflow-y:scroll;">
         <h4>Filter Items</h4>
         @{
@@ -44,41 +59,30 @@
                 }
             }
         }
-       
+
     </div>
+    @*Container for displaying items - needed to put it in another partial view so it can auto update
+        on filtering / sorting*@
     <div id="items" style="float:right; width: 80%">
-       
-       
+
     </div>
 </div>
 <script>
-    function FilterItems() {
-        var searchText = $('#item_search').val();
-
-
-    /*    $.each($('#itemCatalog'), function (i, left) {
-            $('div', left).each(function () {
-                if ($(this).hasClass("thumbnail")) {
-                    if (this.id.indexOf(searchText) != -1) {
-                        $(this).hide();
-                    }
-                }
-
-            });
-        })*/
-    }
 
     $(document).ready(function () {
+        @*Load item catalog*@
         $("#items").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
-
         $("#items").load('@Url.Action("LoadCatalogItems", "Home")')
+        @*Listener on category filter checkboxes*@
         $(':checkbox').change(function () {
             var values = new Array();
             $.each($("input[name='category[]']:checked"), function () {
                 values.push($(this).val());
-                
+
 
             });
+
+            @*On checkbox change, send a HTTPPost to the server and reload items*@
             var uri = encodeURI('@Url.Action("FilterItemsByCategory", "Home")');
 
             $.ajax({
@@ -91,8 +95,8 @@
                     alert(errorThrown);
                 },
                 complete: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus) {
+                    // success!
                     $("#items").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
-
                     $("#items").load('@Url.Action("LoadCatalogItems", "Home")')
 
                 }
@@ -101,30 +105,28 @@
         });
     });
 
-   
+    @*Sorts items using the value of the drop down list and reloads items container on success*@
     function SortItems(sort_type) {
-            var uri = encodeURI('@Url.Action("OrderItemsCatalog", "Home")');
+        var uri = encodeURI('@Url.Action("OrderItemsCatalog", "Home")');
 
-            $.ajax({
-                url: uri,
-                type: "POST",
-                cache: false,
-                data: "{'orderBy':'" + sort_type + "'}",
-                contentType: "application/json",
-                error: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus, /*string*/ errorThrown) {
-                    alert(errorThrown);
-                },
-                complete: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus) {
-                    
-                    $("#items").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
+        $.ajax({
+            url: uri,
+            type: "POST",
+            cache: false,
+            data: "{'orderBy':'" + sort_type + "'}",
+            contentType: "application/json",
+            error: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus, /*string*/ errorThrown) {
+                alert(errorThrown);
+            },
+            complete: function ( /*jqXHR*/ jqXHR, /*string*/ textStatus) {
+                $("#items").html(' <img src="/Content/Images/ajax-loader.gif" style="align-content:center;" />')
+                $("#items").load('@Url.Action("LoadCatalogItems", "Home")')
 
-                    $("#items").load('@Url.Action("LoadCatalogItems", "Home")')
+            }
 
-                }
-
-            });
+        });
 
 
-        };
+    };
 
 </script>

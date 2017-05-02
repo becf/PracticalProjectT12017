@@ -1,14 +1,34 @@
-﻿using EmbrOnlineStore.Models;
+﻿/*******************************************************************************************************
+* SIT782 - PRACTICAL PROJECT T1 2017
+*
+* GROUP 13:
+*           1. REBECCA FRITH (ID: 213582268)
+*           2. ERIC GRIGSON (ID: 212415996)
+*           3. BENJAMIN FRIEBE (ID: 217109315)    
+*
+* ------------------------------------------------------------------------------------------------------
+* FILE NAME:        CHECKOUTFACILITATOR.CS
+* FILE DESCRIPTION: This class contains functionality to assist the checkout process for the online shop.
+*                   It allows the system to add items to a cart and facilitate a full checkout process.
+*
+********************************************************************************************************/
+using EmbrOnlineStore.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmbrOnlineStore.Controllers.Utilities
 {
+    /// <summary>
+    /// Exception class for any check out errors.
+    /// </summary>
+    public class CheckoutException : Exception
+    {
+        public CheckoutException()
+        {
+        }
+    }
     public abstract class CheckoutFacilitator
     {
         // todo: Testing
@@ -131,7 +151,7 @@ namespace EmbrOnlineStore.Controllers.Utilities
 
             customer.customerID = GetExistingCustomerID(customer);
             if (customer.customerID == -1)
-               customer.customerID = CreateCustomerInDatabase(customer); // if customer doesn't exist, create it in the db!
+                customer.customerID = CreateCustomerInDatabase(customer); // if customer doesn't exist, create it in the db!
 
             // create initial order object
             Order order = new Order();
@@ -159,7 +179,7 @@ namespace EmbrOnlineStore.Controllers.Utilities
             }
             else
             {
-                //TODO; THROW NEW EXCEPTION HERE
+                throw new CheckoutException();
             }
             // create a receipt
             return new Receipt(order, customer);
@@ -187,7 +207,16 @@ namespace EmbrOnlineStore.Controllers.Utilities
                 {
                     while (reader.Read()) // iterate through results
                     {
-                        customerid = Int32.Parse(reader[0].ToString());
+                        // catch any exception arising from force parse
+                        try
+                        {
+                            customerid = Int32.Parse(reader[0].ToString());
+                        }
+                        catch
+                        {
+                            customerid = -1;
+                        }
+                       
                     }
                 }
             }
@@ -230,12 +259,18 @@ namespace EmbrOnlineStore.Controllers.Utilities
             return GetExistingCustomerID(customer);
         }
 
+        /// <summary>
+        /// Creates a new order in the database, returning the newly created Order ID.
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
         private static int CreateOrderInDatabase(Order order, int customerID)
         {
-             DatabaseFacilitator database = new DatabaseFacilitator();
+            DatabaseFacilitator database = new DatabaseFacilitator();
 
             database.ConnectToDatabase(); // connect
-          
+
             string query = "INSERT INTO [DBO].[ORDER] (DATE, STATUS,DELIVERY_ADDRESS, CUSTOMER_ID) " +
                 "VALUES (@DATE, @STATUS,@DELIVERY_ADDRESS, @CUSTOMER_ID)";
 
@@ -243,7 +278,7 @@ namespace EmbrOnlineStore.Controllers.Utilities
             {
                 cmd.Parameters.Add("@DATE", SqlDbType.DateTime, 100).Value = order.date;
                 cmd.Parameters.Add("@STATUS", SqlDbType.VarChar, 25).Value = order.status;
-                cmd.Parameters.Add("@DELIVERY_ADDRESS", SqlDbType.VarChar,150).Value = order.deliveryAddress;
+                cmd.Parameters.Add("@DELIVERY_ADDRESS", SqlDbType.VarChar, 150).Value = order.deliveryAddress;
                 cmd.Parameters.Add("@CUSTOMER_ID", SqlDbType.VarChar, 50).Value = customerID;
 
                 int result = cmd.ExecuteNonQuery();
@@ -278,7 +313,15 @@ namespace EmbrOnlineStore.Controllers.Utilities
                 {
                     while (reader.Read()) // iterate through results
                     {
-                        orderid = Int32.Parse(reader[0].ToString());
+                        // catch any exception arising from force parse
+                        try
+                        {
+                            orderid = Int32.Parse(reader[0].ToString());
+                        }
+                        catch
+                        {
+                            orderid = -1;
+                        }
                     }
                 }
             }
@@ -301,7 +344,7 @@ namespace EmbrOnlineStore.Controllers.Utilities
             DatabaseFacilitator database = new DatabaseFacilitator();
 
             database.ConnectToDatabase(); // connect
-          
+
             // foreach line item in order line items, add to database one by one.
             foreach (var line in lineItems)
             {
@@ -312,7 +355,7 @@ namespace EmbrOnlineStore.Controllers.Utilities
                 {
                     cmd.Parameters.Add("@ORDER_ID", SqlDbType.Int, 50).Value = orderID;
                     cmd.Parameters.Add("@ITEM_ID", SqlDbType.Int, 50).Value = line.item.itemID;
-                    cmd.Parameters.Add("@QUANTITY", SqlDbType.Int, 50).Value = line.quantity ;
+                    cmd.Parameters.Add("@QUANTITY", SqlDbType.Int, 50).Value = line.quantity;
                     cmd.Parameters.Add("@PRICE", SqlDbType.Decimal, 50).Value = line.price;
                     int result = cmd.ExecuteNonQuery();
                 }

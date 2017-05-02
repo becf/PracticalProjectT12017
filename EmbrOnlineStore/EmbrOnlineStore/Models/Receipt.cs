@@ -1,18 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*******************************************************************************************************
+* SIT782 - PRACTICAL PROJECT T1 2017
+*
+* GROUP 13:
+*           1. REBECCA FRITH (ID: 213582268)
+*           2. ERIC GRIGSON (ID: 212415996)
+*           3. BENJAMIN FRIEBE (ID: 217109315)    
+*
+* ------------------------------------------------------------------------------------------------------
+* FILE NAME:        RECEIPT.CS
+* FILE DESCRIPTION: Data structure for generating a receipt. This is pretty close to the Order class.
+********************************************************************************************************/
+using System;
 
 namespace EmbrOnlineStore.Models
 {
     public class Receipt
     {
-        public int receiptID { get; set; }
-        public Order order { get; set; }
-        public Customer customer { get; set; }
-        public int totalPrice { get; set; }
-        public DateTime billingDate { get; set; }
+        public int receiptID { get; set; } // an ID for the receipt
+        public Order order { get; set; } // order associated with receipt
+        public Customer customer { get; set; } // customer for the order
+        public int totalPrice { get; set; } // total price of order
+        public DateTime billingDate { get; set; } // billing date of order
 
         /// <summary>
         /// Empty constructor for Receipt object.
