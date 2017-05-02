@@ -37,7 +37,7 @@ namespace EmbrOnlineStore.Controllers
         {
             
              Session["fromSearch"] = false;
-            //  model= TestDataGenerator.PopulateDummyModel();
+            //model= TestDataGenerator.PopulateDummyModel();
             model = new ShopModel();
             model.itemCatalog = ItemCatalogFacilitator.GetAllItems();
             Session["model"] = model;

@@ -51,7 +51,7 @@ namespace EmbrOnlineStore.Controllers.Utilities
         /// </summary>
         public void ConnectToDatabase()
         {
-            if (connection == null || connection.State != System.Data.ConnectionState.Open)
+            if (connection == null || connection.State == System.Data.ConnectionState.Open)
             {
                 throw new DatabaseException();
             }
