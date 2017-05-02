@@ -243,11 +243,6 @@ namespace EmbrOnlineStore.Controllers
         public async Task<ActionResult> LoadShoppingCartMinimalView()
         {
             model = (ShopModel)Session["model"];
-            // test to finish shopping cart -- remove
-
-            model.shoppingCart = new Dictionary<Item, int>();
-            model.shoppingCart.Add(ItemCatalogFacilitator.GetItemByID(1), 5);
-            model.shoppingCart.Add(ItemCatalogFacilitator.GetItemByID(4), 2);
             return PartialView("_ShoppingCartMinimalView", model);
         }
         /// <summary>
