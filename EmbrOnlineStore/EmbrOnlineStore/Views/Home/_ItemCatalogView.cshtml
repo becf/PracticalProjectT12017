@@ -17,7 +17,7 @@
 <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
 <h2>Item Catalogue</h2>
 
-<div style="height:1000px">
+<div style="">
     @*If user is coming from search we will indicate that they are viewing search terms*@
     @{
         if (Session["fromSearch"] != null && Session["searchTerm"] != null)
@@ -43,7 +43,7 @@
     </div>
     <br /><br />
     @*Category filters*@
-    <div id="filters" style="float:left; width:15%; top:50px; height:20%; border: solid 1px #d1cccc; background-color:white; padding:5px; overflow-y:scroll;">
+    <div id="filters" style="float:left; width:18%; top:50px; height:30%; border: solid 1px #d1cccc; background-color:white; padding:5px; overflow-y:scroll;">
         <h4>Filter Items</h4>
         @{
             var categoryList = new List<String>();
@@ -63,7 +63,7 @@
     </div>
     @*Container for displaying items - needed to put it in another partial view so it can auto update
         on filtering / sorting*@
-    <div id="items" style="float:right; width: 80%">
+    <div id="items" style="float:right; width:80%">
 
     </div>
 </div>

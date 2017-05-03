@@ -148,9 +148,17 @@
     <Content Include="Content\Images\ajax-loader.gif" />
     <Content Include="Content\Images\background.jpg" />
     <Content Include="Content\Images\Dummy\1.png" />
+    <Content Include="Content\Images\Dummy\10.png" />
+    <Content Include="Content\Images\Dummy\11.png" />
+    <Content Include="Content\Images\Dummy\12.png" />
     <Content Include="Content\Images\Dummy\2.png" />
     <Content Include="Content\Images\Dummy\3.png" />
     <Content Include="Content\Images\Dummy\4.png" />
+    <Content Include="Content\Images\Dummy\5.png" />
+    <Content Include="Content\Images\Dummy\6.png" />
+    <Content Include="Content\Images\Dummy\7.png" />
+    <Content Include="Content\Images\Dummy\8.png" />
+    <Content Include="Content\Images\Dummy\9.png" />
     <Content Include="Content\Images\EMBR Banner.png" />
     <Content Include="Content\Images\Shopping Cart\delete-icn.svg" />
     <Content Include="Content\Images\Shopping Cart\minus.svg" />

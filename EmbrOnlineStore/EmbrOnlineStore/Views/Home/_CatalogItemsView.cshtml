@@ -1,18 +1,33 @@
-﻿@model EmbrOnlineStore.Models.ShopModel
+﻿@*/*******************************************************************************************************
+    * SIT782 - PRACTICAL PROJECT T1 2017
+    *
+    * GROUP 13:
+    *           1. REBECCA FRITH (ID: 213582268)
+    *           2. ERIC GRIGSON (ID: 212415996)
+    *           3. BENJAMIN FRIEBE (ID: 217109315)
+    *
+    * ------------------------------------------------------------------------------------------------------
+    * FILE NAME:        _CatalogItemsView.cshtml
+    * FILE DESCRIPTION: Displays the catalog of items in a grid format. This is in its own view because
+    *                   we need to be able to refresh it quickly. Uses bootstrap's thumbnail gallery
+    *                   functionality.
+    ********************************************************************************************************/*@
+
+@model EmbrOnlineStore.Models.ShopModel
 <div class="row" style="width:100%;" id="itemCatalog">
     @{
         foreach (var item in Model.itemCatalog)
         {
-            <div class="col-sm-6 col-md-4 @item.category">
-                <div class="thumbnail" id="item_@item.itemID">
+            <div class="col-sm-6 col-md-4 @item.category" >
+                <div class="thumbnail" id="item_@item.itemID" style="min-height:375px;">
                     <img src="@item.imageURL" alt="@item.name">
-                    <div class="caption">
+                    <div class="caption" >
                         <h3>@item.name</h3>
                         <p>@item.description <p>
                         <p><b>$@item.sellingPrice</b></p>
                         <p>
 
-                            <div class="input-group">
+                            <div class="input-group" style="bottom:5px; position:relative;">
                                 <input type="number" class="form-control" id="quantity_@item.itemID" value="1">
                                 <span class="input-group-btn ">
                                     <button class="btn btn-primary" onclick="AddToCart(@item.itemID);" type="button">Add to Cart</button>

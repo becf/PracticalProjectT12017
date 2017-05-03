@@ -1,5 +1,21 @@
-﻿@model EmbrOnlineStore.Models.ShopModel
-    @*http://bootsnipp.com/snippets/featured/simple-invoice*@
+﻿@*/*******************************************************************************************************
+    * SIT782 - PRACTICAL PROJECT T1 2017
+    *
+    * GROUP 13:
+    *           1. REBECCA FRITH (ID: 213582268)
+    *           2. ERIC GRIGSON (ID: 212415996)
+    *           3. BENJAMIN FRIEBE (ID: 217109315)
+    *
+    * ------------------------------------------------------------------------------------------------------
+    * FILE NAME:        _OrderSearchResults.cshtml
+    * FILE DESCRIPTION: Displays the results of a user's order search. Shows previous order in an invoice
+    *                   format.
+    *                   Bootstrap stub adapted from: http://bootsnipp.com/snippets/featured/simple-invoice
+    ********************************************************************************************************/*@
+
+
+@model EmbrOnlineStore.Models.ShopModel
+  
 <style>
     .invoice-title h2, .invoice-title h3 {
     display: inline-block;
@@ -82,42 +98,36 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @{
+                                            foreach (var oli in Model.currentOrder.orderLineItems)
+                                            {
+                                                <tr>
+                                                    <td>@oli.item.name</td>
+                                                    <td class="text-center">$@oli.item.sellingPrice</td>
+                                                    <td class="text-center">@oli.quantity</td>
+                                                    <td class="text-right">$@oli.price</td>
+                                                </tr>
+                                            }
+                                        }
                                         <!-- foreach ($order->lineItems as $line) or some such thing here -->
-                                        <tr>
-                                            <td>BS-200</td>
-                                            <td class="text-center">$10.99</td>
-                                            <td class="text-center">1</td>
-                                            <td class="text-right">$10.99</td>
-                                        </tr>
-                                        <tr>
-                                            <td>BS-400</td>
-                                            <td class="text-center">$20.00</td>
-                                            <td class="text-center">3</td>
-                                            <td class="text-right">$60.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>BS-1000</td>
-                                            <td class="text-center">$600.00</td>
-                                            <td class="text-center">1</td>
-                                            <td class="text-right">$600.00</td>
-                                        </tr>
+                                    
                                         <tr>
                                             <td class="thick-line"></td>
                                             <td class="thick-line"></td>
                                             <td class="thick-line text-center"><strong>Subtotal</strong></td>
-                                            <td class="thick-line text-right">$670.99</td>
+                                            <td class="thick-line text-right">$@Model.currentOrder.orderLineItems.Sum(x => x.price)</td>
                                         </tr>
                                         <tr>
                                             <td class="no-line"></td>
                                             <td class="no-line"></td>
                                             <td class="no-line text-center"><strong>Shipping</strong></td>
-                                            <td class="no-line text-right">$15</td>
+                                            <td class="no-line text-right">$0</td>
                                         </tr>
                                         <tr>
                                             <td class="no-line"></td>
                                             <td class="no-line"></td>
                                             <td class="no-line text-center"><strong>Total</strong></td>
-                                            <td class="no-line text-right">$685.99</td>
+                                            <td class="no-line text-right">$@Model.currentOrder.orderLineItems.Sum(x => x.price)</td>
                                         </tr>
                                     </tbody>
                                 </table>
