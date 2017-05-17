@@ -178,6 +178,9 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="Properties\PublishProfiles\EmbrOnlineStore20170503015936 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\EmbrOnlineStore20170503020159 - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\EmbrOnlineStore20170503020159 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
@@ -197,7 +200,9 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sliiide\sliiide.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

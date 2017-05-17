@@ -99,13 +99,15 @@
                                     </thead>
                                     <tbody>
                                         @{
+                                            var subTotal = 0.0;
                                             foreach (var oli in Model.currentOrder.orderLineItems)
                                             {
+                                                subTotal += oli.price * oli.quantity;
                                                 <tr>
                                                     <td>@oli.item.name</td>
                                                     <td class="text-center">$@oli.item.sellingPrice</td>
                                                     <td class="text-center">@oli.quantity</td>
-                                                    <td class="text-right">$@oli.price</td>
+                                                    <td class="text-right">$@(oli.price * oli.quantity)</td>
                                                 </tr>
                                             }
                                         }
@@ -115,7 +117,7 @@
                                             <td class="thick-line"></td>
                                             <td class="thick-line"></td>
                                             <td class="thick-line text-center"><strong>Subtotal</strong></td>
-                                            <td class="thick-line text-right">$@Model.currentOrder.orderLineItems.Sum(x => x.price)</td>
+                                            <td class="thick-line text-right">$@subTotal</td>
                                         </tr>
                                         <tr>
                                             <td class="no-line"></td>
@@ -127,7 +129,7 @@
                                             <td class="no-line"></td>
                                             <td class="no-line"></td>
                                             <td class="no-line text-center"><strong>Total</strong></td>
-                                            <td class="no-line text-right">$@Model.currentOrder.orderLineItems.Sum(x => x.price)</td>
+                                            <td class="no-line text-right">$@subTotal</td>
                                         </tr>
                                     </tbody>
                                 </table>
